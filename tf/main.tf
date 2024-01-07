@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "app_server" {
-  ami           = "ami-0fdceeca02bef28ea"
+  ami           = "ami-053f05d14a6bd0591"
   instance_type = "t3a.large"
   disable_api_termination = true
 
