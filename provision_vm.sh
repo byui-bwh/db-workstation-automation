@@ -24,7 +24,7 @@ if ! [ -d ~/tf ]; then
 	terraform apply -auto-approve
 	external_ip=$(terraform output instance_public_ip)
 	ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
-	echo "Connect to you VM from this link https://$ip//\":8443/ in your browser."
+	echo "Connect to you VM from this link https://$ip:8443/ in your browser."
 else
 	echo "Terraform is already in the terminal.  The script is exiting to prevent overwriting existing scripts."
 	return
