@@ -22,6 +22,8 @@ if ! [ -d ~/tf ]; then
 	cd ~/tf
 	terraform init
 	terraform apply -auto-approve
+	external_ip=$(terraform output instance_public_ip)
+	echo "connect to you VM from this link https://$external_ip:8443/"
 else
 	echo "Terraform is already in the terminal.  The script is exiting to prevent overwriting existing scripts."
 	return
