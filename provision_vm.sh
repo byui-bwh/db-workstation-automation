@@ -18,7 +18,10 @@ if ! [ -d ~/tf ]; then
 	unzip terraform_1.6.6_linux_amd64.zip
 	mkdir ~/bin
 	mv terraform ~/bin
-	cd tf
+	mv ./tf/ ~/tf/
+	cd ~/tf
+	terraform init
+	terraform apply -auto-approve
 else
 	echo "Terraform is already in the terminal.  The script is exiting to prevent overwriting existing scripts."
 	return
