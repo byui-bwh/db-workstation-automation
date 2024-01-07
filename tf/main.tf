@@ -40,7 +40,6 @@ resource "aws_security_group" "sg" {
 
 resource "aws_eip" "eip" {
   instance = aws_instance.db_workstation.id
-  domain   = "vpc"
 }
 
 resource "aws_instance" "db_workstation" {
