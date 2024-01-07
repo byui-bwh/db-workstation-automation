@@ -16,26 +16,26 @@ provider "aws" {
 resource "aws_security_group" "sg" {
   name        = "ssh-dcv-sg"
   description = "Security Group for NICE DCV over HTTPS"
-  ingress [
-  	{
+  ingress {
 	    from_port   = 8443
 	    to_port     = 8443
 	    protocol    = "tcp"
 	    cidr_blocks = ["0.0.0.0/0"]
-	},
- 	{
+	}
+	
+  ingress {
 	    from_port   = 8443
 	    to_port     = 8443
 	    protocol    = "udp"
 	    cidr_blocks = ["0.0.0.0/0"]
-	},
-	 {
+	}
+  ingress {
 	    from_port   = 22
 	    to_port     = 22
 	    protocol    = "tcp"
 	    cidr_blocks = ["0.0.0.0/0"]
 	}
-	]
+
 }
 
 resource "aws_instance" "db_workstation" {
