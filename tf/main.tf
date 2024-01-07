@@ -38,6 +38,11 @@ resource "aws_security_group" "sg" {
 
 }
 
+resource "aws_eip" "eip" {
+  instance = aws_instance.db_workstation.id
+  domain   = "vpc"
+}
+
 resource "aws_instance" "db_workstation" {
   ami           = "ami-053f05d14a6bd0591"
   instance_type = "t3a.large"
