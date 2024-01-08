@@ -4,4 +4,4 @@ This repo contains the scripts and Terraform binaries to provision a new DB Virt
 
 Then do a 'cd db-workstation-automation' to change into the directory.  Then source the script by running '. ./provision_vm.sh'  The script will prompt you for your email.  Please use your university email for the authentication of the VM.  The script will automate the creation of a new virtual machine instance for you with the settings required for the class.
 
-Upon completion of the script, the output will display a URL for you to copy into your browser.  Please use this URl to connect to your instance as described in the documentation.
+Upon completion of the script, the output will display a URL for you to copy into your browser.  Please use this URL to connect to your instance as described in the documentation.
