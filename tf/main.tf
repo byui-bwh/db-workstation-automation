@@ -14,7 +14,7 @@ provider "aws" {
 }
 
 resource "aws_security_group" "sg" {
-  name        = "ssh-dcv-sg"
+  name_prefix   = "ssh-dcv-sg"
   description = "Security Group for NICE DCV over HTTPS"
   ingress {
 	    from_port   = 8443
