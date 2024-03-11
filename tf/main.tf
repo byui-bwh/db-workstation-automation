@@ -53,6 +53,7 @@ resource "aws_instance" "db_workstation" {
   ami           = "ami-053f05d14a6bd0591"
   instance_type = "t3a.large"
   disable_api_termination = true
+  iam_instance_profile = "LabInstanceProfile"
   vpc_security_group_ids = [aws_security_group.sg.id]
   
   tags = {
