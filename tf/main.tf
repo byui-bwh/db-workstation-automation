@@ -50,7 +50,7 @@ resource "aws_eip" "eip" {
 }
 
 resource "aws_instance" "db_workstation" {
-  ami           = "ami-0ec3786327df41cb4"
+  ami           = "ami-0e9aae06cde76e2d9"
   instance_type = "t3a.large"
   disable_api_termination = true
   iam_instance_profile = "LabInstanceProfile"
