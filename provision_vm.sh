@@ -15,11 +15,14 @@ fi
 
 #  Create a directory for Terraform and change into the directory.  Then install Terraform.account_id=$(aws sts get-caller-identity --query "Account" --output text)
 if ! [ -d ~/tf ]; then
-	unzip terraform_1.6.6_linux_amd64.zip
+	unzip terraform_1.9.8_linux_amd64.zip
 	mkdir ~/bin
 	mv terraform ~/bin
 	mv ./tf/ ~/tf/
 	cd ~/tf
+	ssh-keygen -t rsa -b 4096 -f "$(pwd)/db_workstation.pem" -m pem -P "" && mv "$(pwd)/db_workstation.pem.pub" "$(pwd)/db_workstation.pub"
+	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)"
+	rm db_workstation.p*
 	terraform init
 	terraform apply -auto-approve
 	external_ip=$(terraform output instance_public_ip)

@@ -13,6 +13,11 @@ provider "aws" {
   region  = "us-west-2"
 }
 
+resource "aws_key_pair" "db_workstation_key" {
+    key_name = "db_workstation"
+    public_key = file("/home/cloudshell-user/tf/db_workstation.pub")
+}
+
 resource "aws_security_group" "sg" {
   name_prefix   = "ssh-dcv-sg"
   description = "Security Group for NICE DCV over HTTPS"
@@ -55,6 +60,7 @@ resource "aws_instance" "db_workstation" {
   disable_api_termination = true
   iam_instance_profile = "LabInstanceProfile"
   vpc_security_group_ids = [aws_security_group.sg.id]
+  key_name = aws_key_pair.db_workstation_key.key_name
   
   tags = {
     Name = "DB Ubuntu Workstation"
