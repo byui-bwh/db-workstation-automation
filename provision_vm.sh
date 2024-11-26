@@ -21,7 +21,7 @@ if ! [ -d ~/tf ]; then
 	mv ./tf/ ~/tf/
 	cd ~/tf
 	ssh-keygen -t rsa -b 4096 -f "$(pwd)/db_workstation.pem" -m pem -P "" && mv "$(pwd)/db_workstation.pem.pub" "$(pwd)/db_workstation.pub"
-	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)"
+	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)" --region us-west-2
 	terraform init
 	terraform apply -auto-approve
 	rm db_workstation.p*
