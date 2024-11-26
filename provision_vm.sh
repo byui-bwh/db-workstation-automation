@@ -22,9 +22,9 @@ if ! [ -d ~/tf ]; then
 	cd ~/tf
 	ssh-keygen -t rsa -b 4096 -f "$(pwd)/db_workstation.pem" -m pem -P "" && mv "$(pwd)/db_workstation.pem.pub" "$(pwd)/db_workstation.pub"
 	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)"
-	rm db_workstation.p*
 	terraform init
 	terraform apply -auto-approve
+	rm db_workstation.p*
 	external_ip=$(terraform output instance_public_ip)
 	ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
 	echo "Connect to you VM from this link https://$ip:8443/ in your browser."
