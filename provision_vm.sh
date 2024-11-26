@@ -24,7 +24,7 @@ if ! [ -d ~/tf ]; then
 	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)" --region us-west-2
 	terraform init
 	terraform apply -auto-approve
-	rm db_workstation.p*
+	rm db_workstation.pem
 	external_ip=$(terraform output instance_public_ip)
 	ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
 	echo "Connect to you VM from this link https://$ip:8443/ in your browser."
