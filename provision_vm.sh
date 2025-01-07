@@ -71,7 +71,7 @@ if ! [ -d ~/tf ]; then
 	mv ./tf/ ~/tf/
 	cd ~/tf
 	ssh-keygen -t rsa -b 4096 -f "$(pwd)/db_workstation.pem" -m pem -P "" && mv "$(pwd)/db_workstation.pem.pub" "$(pwd)/db_workstation.pub"
-	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)" --region us-west-2
+	aws secretsmanager create-secret --name MyDBWorkstationSecret-$( date '+%Y-%m-%d-%s' ) --secret-string "$(cat db_workstation.pem)" --region us-west-2
 	terraform init
 	echo "-var course_selection=$course_selection"
 	terraform apply -auto-approve -var "course_selection=$(( course_selection - 1))"
