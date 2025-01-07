@@ -54,7 +54,7 @@ display_menu
 user_input
 #set_newpassword
 
-curl=$(curl -s -X PUT -H "Content-Type: application/json" -d "{  \"email\": \"$email\",  \"accountId\": \"$account_id\",  \"classId\": \"$course_selection\" }" "https://ooy1dmgurf.execute-api.us-west-2.amazonaws.com/prod")
+curl=$(curl -s -X PUT -H "Content-Type: application/json" -d "{  \"email\": \"$email\",  \"accountId\": \"$account_id\",  \"classId\": \"$(( course_selection - 1 ))\" }" "https://ooy1dmgurf.execute-api.us-west-2.amazonaws.com/prod")
 statusCode=$(echo $curl | jq -r '.statusCode')
 if (( $statusCode != 204 )); then
 	echo -e "An error occurred granting you permissions to the VM image.\nError: $curl\nContact your TA or instructor with this error for help."
