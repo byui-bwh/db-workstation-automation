@@ -3,6 +3,7 @@
 #  An automation script to provision AWS EC2 instance into sandbox account.  This will get your AWS account ID and then request access to the DB AMI.  Then it will run a Terraform script to provision an EC2 instance.
 
 course_selection=-1
+PASSWORD=itmpassword123
 #menu for selecting class to provision VM
 display_menu () {
     echo -e "Please select the class you are creating a virtual machine for:\n1. ITM111\n2. ITM220\n3. ITM325\n4. DEFAULT\n"
@@ -32,6 +33,10 @@ user_input () {
         esac
 }
 
+set_newpassword () {
+  read -p "Please enter a new password to be used by your student user on your VM: " PASSWORD
+
+}
 #  grant access to AWS AMI
 account_id=$(aws sts get-caller-identity --query "Account" --output text)
 echo "Your AWS account ID is: $account_id"
@@ -40,6 +45,7 @@ echo "Your email: $email"
 
 display_menu
 user_input
+set_newpassword
 
 curl=$(curl -s -X PUT -H "Content-Type: application/json" -d "{  \"email\": \"$email\",  \"accountId\": \"$account_id\",  \"classId\": \"$course_selection\" }" "https://ooy1dmgurf.execute-api.us-west-2.amazonaws.com/prod")
 statusCode=$(echo $curl | jq -r '.statusCode')
@@ -61,9 +67,20 @@ if ! [ -d ~/tf ]; then
 	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)" --region us-west-2
 	terraform init
 	terraform apply -auto-approve -var "course_selection=$course_selection"
-	rm db_workstation.pem
 	external_ip=$(terraform output instance_public_ip)
-	ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
+  ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
+	NEWPASSWORD="echo -e \"$PASSWORD\n$PASSWORD\" | sudo passwd student"
+  chmod 400 db_workstation.pem
+  #sleep for 2 minutes while new VM starts
+  echo "Waiting for new VM to start."
+  for i in {1..120}; do
+    echo -ne "Time remaining: $((120 - i)) seconds\r"
+    sleep 1
+  done
+
+  ssh -i db_workstation.pem -t student@$ip $NEWPASSWORD
+	rm db_workstation.pem
+
 	echo "Connect to you VM from this link https://$ip:8443/ in your browser."
 else
 	echo "Terraform is already in the terminal.  The script is exiting to prevent overwriting existing scripts."
