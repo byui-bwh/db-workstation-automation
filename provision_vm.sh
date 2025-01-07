@@ -66,8 +66,8 @@ echo -e "You have selected $course_selection\nYour VM will now be provisioned in
 #  Create a directory for Terraform and change into the directory.  Then install Terraform.account_id=$(aws sts get-caller-identity --query "Account" --output text)
 if ! [ -d ~/tf ]; then
 	unzip terraform_1.10.3_linux_amd64.zip
-	mkdir ~/bin
-	mv terraform ~/bin
+	mkdir ~/.local/bin
+	mv terraform ~/.local/bin
 	mv ./tf/ ~/tf/
 	cd ~/tf
 	ssh-keygen -t rsa -b 4096 -f "$(pwd)/db_workstation.pem" -m pem -P "" && mv "$(pwd)/db_workstation.pem.pub" "$(pwd)/db_workstation.pub"
