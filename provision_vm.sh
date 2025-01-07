@@ -73,7 +73,8 @@ if ! [ -d ~/tf ]; then
 	ssh-keygen -t rsa -b 4096 -f "$(pwd)/db_workstation.pem" -m pem -P "" && mv "$(pwd)/db_workstation.pem.pub" "$(pwd)/db_workstation.pub"
 	aws secretsmanager create-secret --name MyDBWorkstationSecret --secret-string "$(cat db_workstation.pem)" --region us-west-2
 	terraform init
-	terraform apply -auto-approve -var "course_selection=$course_selection"
+	echo "-var course_selection=$course_selection"
+	terraform apply -auto-approve -var "course_selection=$(( course_selection - 1))"
 	external_ip=$(terraform output instance_public_ip)
   ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
 	NEWPASSWORD="echo -e \"$PASSWORD\n$PASSWORD\" | sudo passwd student"
