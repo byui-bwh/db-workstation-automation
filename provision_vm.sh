@@ -81,7 +81,7 @@ if ! [ -d ~/tf ]; then
   #sleep for 2 minutes while new VM starts
   echo "Waiting for new VM to start."
   for i in {1..120}; do
-    echo -ne "Time remaining: $((120 - i)) seconds\r"
+    echo -ne ".$((120 - i))"
     sleep 1
   done
   echo -e "You will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
