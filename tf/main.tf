@@ -13,6 +13,18 @@ provider "aws" {
   region  = "us-west-2"
 }
 
+variable "ami_list" {
+ description = "This is a list of AMI for DB instances per class"
+ type        = list(string)
+ default     = ["ami-0e9aae06cde76e2d9", "ami-0cb7f66db0b14b733", "ami-0e9aae06cde76e2d9", "ami-0e9aae06cde76e2d9"]
+}
+
+variable "course_selection" {
+ description = "This is the course selection from user input"
+ type        = number
+ default     = 4
+}
+
 resource "aws_key_pair" "db_workstation_key" {
     key_name = "db_workstation"
     public_key = file("/home/cloudshell-user/tf/db_workstation.pub")
@@ -55,7 +67,7 @@ resource "aws_eip" "eip" {
 }
 
 resource "aws_instance" "db_workstation" {
-  ami           = "ami-0e9aae06cde76e2d9"
+  ami           = var.ami_list[var.course_selection]
   instance_type = "t3a.large"
   disable_api_termination = true
   iam_instance_profile = "LabInstanceProfile"
