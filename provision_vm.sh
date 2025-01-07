@@ -79,15 +79,15 @@ if ! [ -d ~/tf ]; then
 	NEWPASSWORD="echo -e \"$PASSWORD\n$PASSWORD\" | sudo passwd student"
   chmod 400 db_workstation.pem
   #sleep for 2 minutes while new VM starts
-  echo "Waiting for new VM to start."
+  echo "Waiting for new VM to start. Countdown in seconds...yes"
   for i in {1..120}; do
     echo -ne ".$((120 - i))"
     sleep 1
   done
   echo -e "You will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
-  ssh -i db_workstation.pem -t student@$ip "sudo passwd student"
+  ssh -i db_workstation.pem -o "StrictHostKeyChecking no" -t student@$ip "sudo passwd student"
 #  $NEWPASSWORD
-	rm db_workstation.pem
+	rm -f db_workstation.pem
 
 	echo "Connect to you VM from this link https://$ip:8443/ in your browser."
 else
