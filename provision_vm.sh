@@ -33,10 +33,17 @@ user_input () {
         esac
 }
 
+#function to get new user password
 set_newpassword () {
-  read -p "Please enter a new password to be used by your student user on your VM: " PASSWORD
+  read -ps "Please enter a new password to be used by your student user on your VM: " PASSWORD
+  read -ps "Confirm new password: " CPASSWORD
 
+  if [[ "$PASSWORD" != "$CPASSWORD" ]]; then
+    echo "Passwords do not match try again."
+    set_newpassword
+  fi
 }
+
 #  grant access to AWS AMI
 account_id=$(aws sts get-caller-identity --query "Account" --output text)
 echo "Your AWS account ID is: $account_id"
@@ -45,7 +52,7 @@ echo "Your email: $email"
 
 display_menu
 user_input
-set_newpassword
+#set_newpassword
 
 curl=$(curl -s -X PUT -H "Content-Type: application/json" -d "{  \"email\": \"$email\",  \"accountId\": \"$account_id\",  \"classId\": \"$course_selection\" }" "https://ooy1dmgurf.execute-api.us-west-2.amazonaws.com/prod")
 statusCode=$(echo $curl | jq -r '.statusCode')
@@ -77,8 +84,9 @@ if ! [ -d ~/tf ]; then
     echo -ne "Time remaining: $((120 - i)) seconds\r"
     sleep 1
   done
-
-  ssh -i db_workstation.pem -t student@$ip $NEWPASSWORD
+  echo -e "You will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
+  ssh -i db_workstation.pem -t student@$ip "sudo passwd student"
+#  $NEWPASSWORD
 	rm db_workstation.pem
 
 	echo "Connect to you VM from this link https://$ip:8443/ in your browser."
