@@ -22,6 +22,7 @@ variable "ami_list" {
 variable "course_selection" {
  description = "This is the course selection from user input"
  type        = number
+ default     = 4
 }
 
 resource "aws_key_pair" "db_workstation_key" {
@@ -67,7 +68,7 @@ resource "aws_eip" "eip" {
 
 resource "aws_instance" "db_workstation" {
   ami           = var.ami_list[var.course_selection]
-  instance_type = "t3a.large"
+  instance_type = "r6a.large"
   disable_api_termination = true
   iam_instance_profile = "LabInstanceProfile"
   vpc_security_group_ids = [aws_security_group.sg.id]
