@@ -22,7 +22,7 @@ variable "ami_list" {
 variable "course_selection" {
  description = "This is the course selection from user input"
  type        = number
- default     = 4
+ default     = 3
 }
 
 resource "aws_key_pair" "db_workstation_key" {
