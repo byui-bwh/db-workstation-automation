@@ -74,7 +74,7 @@ if ! [ -d ~/tf ]; then
 	aws secretsmanager create-secret --name MyDBWorkstationSecret-$( date '+%Y-%m-%d-%s' ) --secret-string "$(cat db_workstation.pem)" --region us-west-2
 	terraform init
 	echo "-var course_selection=$course_selection"
-  echo -e "You have selected $course_selection\n\nYour VM will now be provisioned in the cloud.\n\nThis will take a few minutes.\n\nPlease DON'T close the window or hit ctrl-c.  You will receive a prompt when complete with instructions."
+  	echo -e "You have selected $course_selection\n\nYour VM will now be provisioned in the cloud.\n\nThis will take a few minutes.\n\nPlease DON'T close the window or hit ctrl-c.  You will receive a prompt when complete with instructions."
 	terraform apply -auto-approve -var "course_selection=$(( course_selection - 1))"
 	external_ip=$(terraform output instance_public_ip)
   ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
