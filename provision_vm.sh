@@ -61,7 +61,7 @@ if (( $statusCode != 204 )); then
 	return 1
 fi
 
-echo -e "You have selected $course_selection\nYour VM will now be provisioned in the cloud.  This will take a few minutes.\nPlease DON'T close the window or hit ctrl-c.  You will receive a prompt when complete with instructions."
+
 
 #  Create a directory for Terraform and change into the directory.  Then install Terraform.account_id=$(aws sts get-caller-identity --query "Account" --output text)
 if ! [ -d ~/tf ]; then
@@ -79,8 +79,10 @@ if ! [ -d ~/tf ]; then
   ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
 	NEWPASSWORD="echo -e \"$PASSWORD\n$PASSWORD\" | sudo passwd student"
   chmod 400 db_workstation.pem
+
+  echo -e "You have selected $course_selection\n\nYour VM will now be provisioned in the cloud.\n\nThis will take a few minutes.\n\nPlease DON'T close the window or hit ctrl-c.  You will receive a prompt when complete with instructions."
   #sleep for 2 minutes while new VM starts
-  echo "Waiting for new VM to start. Countdown in seconds...yes"
+  echo -n "Waiting for new VM to start. Countdown in seconds..."
   for i in {1..120}; do
     echo -ne ".$((120 - i))"
     sleep 1
