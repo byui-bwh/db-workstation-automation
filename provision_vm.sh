@@ -87,9 +87,8 @@ if ! [ -d ~/tf ]; then
     echo -ne ".$((120 - i))"
     sleep 1
   done
-  echo -e "You will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
+  echo -e "\n\nYou will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
   ssh -i db_workstation.pem -o "StrictHostKeyChecking no" -t student@$ip "sudo passwd student && rm ~/.local/share/keyrings/login.keyring"
-#  $NEWPASSWORD
 	rm -f db_workstation.pem
 
 	echo "Connect to you VM from this link https://$ip:8443/ in your browser."
@@ -97,8 +96,3 @@ else
 	echo "Terraform is already in the terminal.  The script is exiting to prevent overwriting existing scripts."
 	return
 fi
-
-
-
-
-
