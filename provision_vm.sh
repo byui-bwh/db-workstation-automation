@@ -88,7 +88,7 @@ if ! [ -d ~/tf ]; then
     sleep 1
   done
   echo -e "You will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
-  ssh -i db_workstation.pem -o "StrictHostKeyChecking no" -t student@$ip "sudo passwd student"
+  ssh -i db_workstation.pem -o "StrictHostKeyChecking no" -t student@$ip "sudo passwd student && rm ~/.local/share/keyrings/login.keyring"
 #  $NEWPASSWORD
 	rm -f db_workstation.pem
 
