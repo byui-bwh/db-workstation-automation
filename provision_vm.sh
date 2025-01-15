@@ -11,7 +11,9 @@ display_menu () {
 
 #get user input of the selection of a class
 user_input () {
-    read -p "Choose your class by entering [1-4] for the class selection: " course_selection
+
+  course_selection=$(whiptail --title "Database Class Selector" --menu "Choose your class" 15 50 5 "1" "ITM111" "2" "ITM220" "3" "ITM325" "4" "Default" 3>&1 1>&2 2>&3)
+#    read -p "Choose your class by entering [1-4] for the class selection: " course_selection
 
         case $course_selection in
             1)
@@ -44,11 +46,29 @@ set_newpassword () {
   fi
 }
 
+get_byui_email () {
+
+email=$(whiptail --inputbox "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" 8 39 @byui.edu --title "Enter BYUI email" 3>&1 1>&2 2>&3)
+#  read -p "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" email
+  echo "Your email: $email"
+
+
+}
+
+vm_startup_countdown () {
+    {
+      for ((i = 0 ; i <= 150 ; i+=1)); do
+      sleep 1.0;
+      echo $i;
+      done;
+    } | whiptail --gauge "Please wait while virtual machine is starting..." 6 50 0
+}
+
 #  grant access to AWS AMI
+sudo dnf install -y newt
 account_id=$(aws sts get-caller-identity --query "Account" --output text)
 echo "Your AWS account ID is: $account_id"
-read -p "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" email
-echo "Your email: $email"
+get_byui_email
 
 display_menu
 user_input
@@ -81,12 +101,14 @@ if ! [ -d ~/tf ]; then
 	NEWPASSWORD="echo -e \"$PASSWORD\n$PASSWORD\" | sudo passwd student"
   chmod 400 db_workstation.pem
 
-    #sleep for 2 minutes while new VM starts
-  echo -n "Waiting for new VM to start. Countdown in seconds..."
-  for i in {1..120}; do
-    echo -ne ".$((120 - i))"
-    sleep 1
-  done
+    #sleep for 2.5 minutes while new VM starts
+  vm_startup_countdown
+
+#  echo -n "Waiting for new VM to start. Countdown in seconds..."
+#  for i in {1..150}; do
+#    echo -ne ".$((150 - i))"
+#    sleep 1
+#  done
   echo -e "\n\nYou will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
   ssh -i db_workstation.pem -o "StrictHostKeyChecking no" -t student@$ip "sudo passwd student && rm ~/.local/share/keyrings/login.keyring"
 	rm -f db_workstation.pem
