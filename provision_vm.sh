@@ -48,7 +48,7 @@ set_newpassword () {
 
 get_byui_email () {
 
-email=$(whiptail --inputbox "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" 8 39 @byui.edu --title "Enter BYUI email" 3>&1 1>&2 2>&3)
+email=$(whiptail --inputbox "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" 8 39 --title "Enter BYUI email" 3>&1 1>&2 2>&3)
 #  read -p "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" email
   echo "Your email: $email"
 
