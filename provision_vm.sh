@@ -59,9 +59,9 @@ vm_startup_countdown () {
     {
       for ((i = 0 ; i <= 150 ; i+=1)); do
       sleep 1.0;
-      echo $i;
+      printf '%.*f\n' 0 $(bc -l <<< "$i/150 * 100");
       done;
-    } | whiptail --gauge "Please wait while virtual machine is starting..." 6 50 0
+    } | whiptail --gauge "Please wait while virtual machine is starting..." 6 60 0
 }
 
 #  grant access to AWS AMI
