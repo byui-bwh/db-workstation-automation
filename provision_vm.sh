@@ -63,7 +63,7 @@ fi
 
 #  Create a directory for Terraform and change into the directory.  Then install Terraform.account_id=$(aws sts get-caller-identity --query "Account" --output text)
 if ! [ -d ~/tf ]; then
-	unzip terraform_1.10.3_linux_amd64.zip
+	unzip terraform_1.10.4_linux_amd64.zip
 	mkdir ~/.local/bin
 	mv terraform ~/.local/bin
 	mv ./tf/ ~/tf/
