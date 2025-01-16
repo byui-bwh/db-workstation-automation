@@ -1,19 +1,12 @@
 #!/bin/bash
 
 #  An automation script to provision AWS EC2 instance into sandbox account.  This will get your AWS account ID and then request access to the DB AMI.  Then it will run a Terraform script to provision an EC2 instance.
-
+# initialize course selection variable
 course_selection=-1
-PASSWORD=itmpassword123
-#menu for selecting class to provision VM
-display_menu () {
-    echo -e "Please select the class you are creating a virtual machine for:\n1. ITM111\n2. ITM220\n3. ITM325\n4. DEFAULT\n"
-}
 
 #get user input of the selection of a class
 user_input () {
-
   course_selection=$(whiptail --title "Database Class Selector" --menu "Choose your class" 15 50 5 "1" "ITM111" "2" "ITM220" "3" "ITM325" "4" "Default" 3>&1 1>&2 2>&3)
-#    read -p "Choose your class by entering [1-4] for the class selection: " course_selection
 
         case $course_selection in
             1)
@@ -35,24 +28,10 @@ user_input () {
         esac
 }
 
-#function to get new user password
-set_newpassword () {
-  read -ps "Please enter a new password to be used by your student user on your VM: " PASSWORD
-  read -ps "Confirm new password: " CPASSWORD
-
-  if [[ "$PASSWORD" != "$CPASSWORD" ]]; then
-    echo "Passwords do not match try again."
-    set_newpassword
-  fi
-}
-
+#function to get user's byui.edu email
 get_byui_email () {
-
-email=$(whiptail --inputbox "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" 8 39 --title "Enter BYUI email" 3>&1 1>&2 2>&3)
-#  read -p "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" email
+  email=$(whiptail --inputbox "Enter your BYUI email address with format {SSSNNNNN@byui.edu} S=letter, N=number:" 8 39 --title "Enter BYUI email" 3>&1 1>&2 2>&3)
   echo "Your email: $email"
-
-
 }
 
 vm_startup_countdown () {
@@ -66,13 +45,12 @@ vm_startup_countdown () {
 
 #  grant access to AWS AMI
 sudo dnf install -y newt
+sudo dnf install -y bc
 account_id=$(aws sts get-caller-identity --query "Account" --output text)
 echo "Your AWS account ID is: $account_id"
 get_byui_email
-
 display_menu
 user_input
-#set_newpassword
 
 curl=$(curl -s -X PUT -H "Content-Type: application/json" -d "{  \"email\": \"$email\",  \"accountId\": \"$account_id\",  \"classId\": \"$(( course_selection - 1 ))\" }" "https://ooy1dmgurf.execute-api.us-west-2.amazonaws.com/prod")
 statusCode=$(echo $curl | jq -r '.statusCode')
@@ -98,17 +76,11 @@ if ! [ -d ~/tf ]; then
 	terraform apply -auto-approve -var "course_selection=$(( course_selection - 1))"
 	external_ip=$(terraform output instance_public_ip)
   ip=$(sed -e 's/^"//' -e 's/"$//' <<<"$external_ip")
-	NEWPASSWORD="echo -e \"$PASSWORD\n$PASSWORD\" | sudo passwd student"
-  chmod 400 db_workstation.pem
+	chmod 400 db_workstation.pem
 
     #sleep for 2.5 minutes while new VM starts
   vm_startup_countdown
 
-#  echo -n "Waiting for new VM to start. Countdown in seconds..."
-#  for i in {1..150}; do
-#    echo -ne ".$((150 - i))"
-#    sleep 1
-#  done
   echo -e "\n\nYou will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect. "
   ssh -i db_workstation.pem -o "StrictHostKeyChecking no" -t student@$ip "sudo passwd student && rm ~/.local/share/keyrings/login.keyring"
 	rm -f db_workstation.pem
