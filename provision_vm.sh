@@ -6,7 +6,7 @@ course_selection=-1
 
 #get user input of the selection of a class
 user_input () {
-  course_selection=$(whiptail --title "Database Class Selector" --menu "Choose your class" 15 50 5 "1" "ITM111" "2" "ITM220" "3" "ITM325" "4" "Default" 3>&1 1>&2 2>&3)
+  course_selection=$(whiptail --title "Class Selector" --menu "Choose the class you will be using the VM for" 15 50 5 "1" "ITM111" "2" "ITM220" "3" "ITM325" "4" "ITM350" 3>&1 1>&2 2>&3)
 
         case $course_selection in
             1)
@@ -19,7 +19,7 @@ user_input () {
                 echo "You have selected ITM325 for the VM."
                 ;;
             4)
-                echo "You have selected the default VM."
+                echo "You have selected ITM350 for the VM."
                 ;;
             *)
                 echo "Invalid input. Please enter 1, 2, 3, or 4."

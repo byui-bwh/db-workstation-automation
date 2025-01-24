@@ -16,7 +16,7 @@ provider "aws" {
 variable "ami_list" {
  description = "This is a list of AMI for DB instances per class"
  type        = list(string)
- default     = ["ami-0cb7f66db0b14b733", "ami-0cb7f66db0b14b733", "ami-09d0b3bf6ce250dd5", "ami-09d0b3bf6ce250dd5"]
+ default     = ["ami-0cb7f66db0b14b733", "ami-0cb7f66db0b14b733", "ami-09d0b3bf6ce250dd5", "ami-05b7ee685cf469e87"]
 }
 
 variable "course_selection" {
@@ -75,7 +75,7 @@ resource "aws_instance" "db_workstation" {
   key_name = aws_key_pair.db_workstation_key.key_name
   
   tags = {
-    Name = "DB Ubuntu Workstation"
+    Name = "Ubuntu Workstation"
   }
 }
 
