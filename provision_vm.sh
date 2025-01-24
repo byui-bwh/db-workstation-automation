@@ -36,9 +36,9 @@ get_byui_email () {
 
 vm_startup_countdown () {
     {
-      for ((i = 0 ; i <= 150 ; i+=1)); do
+      for ((i = 0 ; i <= 200 ; i+=1)); do
       sleep 1.0;
-      printf '%.*f\n' 0 $(bc -l <<< "$i/150 * 100");
+      printf '%.*f\n' 0 $(bc -l <<< "$i/200 * 100");
       done;
     } | whiptail --gauge "Please wait while virtual machine is starting..." 6 60 0
 }
