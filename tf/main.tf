@@ -26,7 +26,7 @@ variable "course_selection" {
 }
 
 resource "aws_key_pair" "db_workstation_key" {
-    key_name = "db_workstation"
+    key_name_prefix = "db_workstation"
     public_key = file("/home/cloudshell-user/tf/db_workstation.pub")
 }
 
