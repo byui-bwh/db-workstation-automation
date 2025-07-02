@@ -81,7 +81,10 @@ if ! [ -d ~/tf ]; then
     #sleep for 2.5 minutes while new VM starts
   vm_startup_countdown
 
-  echo -e "\n\nYou will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect.\n\nNote, you will not see of the characters or anything at the cursor as you type your password. "
+  RED='\033[1;41m'
+  BPurple='\033[6;35m'
+  NC='\033[0m'
+  echo -e " \n\n${RED}You will be prompted to enter a new password for your student user.\nUse a strong password and remember this password as you will need it each time you connect.\n\nNote, you will not see of the characters or anything at the cursor as you type your password.${NC}"
   ssh -i db_workstation.pem -o "StrictHostKeyChecking no" -t student@$ip "sudo passwd student && rm ~/.local/share/keyrings/login.keyring"
 	rm -f db_workstation.pem
 
