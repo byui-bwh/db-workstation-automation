@@ -16,7 +16,7 @@ provider "aws" {
 variable "ami_list" {
  description = "This is a list of AMI for DB instances per class"
  type        = list(string)
- default     = ["ami-0cb7f66db0b14b733", "ami-0cb7f66db0b14b733", "ami-09d0b3bf6ce250dd5", "ami-05b7ee685cf469e87"]
+ default     = ["ami-0cb7f66db0b14b733", "ami-0cb7f66db0b14b733", "ami-09d0b3bf6ce250dd5", "ami-05b7ee685cf469e87", "ami-09c92ef05f9d274b9"]
 }
 
 variable "course_selection" {
